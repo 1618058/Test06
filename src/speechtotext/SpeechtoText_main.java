@@ -14,39 +14,15 @@ public class SpeechtoText_main {
 
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
-		 SpeechToText service = new SpeechToText();
-		    service.setUsernameAndPassword("8e44b6e2-e113-44b6-8a59-8cf19f2e0bf2", "237hKKWAKnDq");
 
 		    File audio = new File("audio/output.wav");
-		    RecognizeOptions options = null;
-			try {
-				options = new RecognizeOptions.Builder()
-					.model("ja-JP_BroadbandModel")
-				    .audio(audio)
-				    .contentType(RecognizeOptions.ContentType.AUDIO_WAV)
-				    .build();
-			} catch (FileNotFoundException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		    SpeechRecognitionResults transcript = service.recognize(options).execute();
+
+		    SpeechtoText_lib slib = new SpeechtoText_lib(new File("audio/output.wav"));
+    		SpeechRecognitionResults transcript = slib.getTranscript();
 
 		    System.out.println(transcript);
-		    String s = String.valueOf(transcript);
-		    ObjectMapper mapper = new ObjectMapper();
-		    
-		    try {
-				JsonNode node = mapper.readTree(s);
-				for (int i = 0; i < node.get("results").size(); i++) {
-				String text = node.get("results").get(0).get("alternatives").get(0).get("transcript").toString();
-				String confidence = node.get("results").get(0).get("alternatives").get(0).get("confidence").toString();
-				System.out.println("transcript" + text);
-				System.out.println("confidence" + confidence);
-				}
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+
+		    slib.getJson(transcript);
 
 	}
 
